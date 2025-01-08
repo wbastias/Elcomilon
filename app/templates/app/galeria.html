@@ -1,0 +1,50 @@
+{% extends 'app/base.html' %}
+
+{% load static %}
+
+{% block css %} 
+
+    <!-- esta son los link de las funciones que le da a las imagenes en la galeria para no tenerlo directament en el html base-->
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,700;1,600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+{% endblock %}
+
+{% block js %}
+
+    <!-- esta son los scrip para la funcion de la galeria para no tenerlo en la base del html -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<br><br>
+<!-- el content sirve para colocar todo dentro de el bloke de contenido que esta en la base de html -->
+    <div id="contenido">
+
+           <h2 class="titulo">GALERIA RESTAURANTE</h2>
+           <br><br>
+           <div class="galeria">
+                <a data-fancybox="gallery" href="{% static 'app/img/tienda/1.jpg' %}"><img src="{% static 'app/img/tienda/1.jpg' %}"></a>
+                <a data-fancybox="gallery" href="{% static 'app/img/tienda/2.jpg' %}"><img src="{% static 'app/img/tienda/2.jpg' %}"></a>
+                <a data-fancybox="gallery" href="{% static 'app/img/tienda/3.jpg' %}"><img src="{% static 'app/img/tienda/3.jpg' %}"></a>
+                <a data-fancybox="gallery" href="{% static 'app/img/tienda/4.jpg' %}"><img src="{% static 'app/img/tienda/4.jpg' %}"></a>
+                <a data-fancybox="gallery" href="{% static 'app/img/tienda/5.jpg' %}"><img src="{% static 'app/img/tienda/5.jpg' %}"></a>  
+                <a data-fancybox="gallery" href="{% static 'app/img/tienda/6.jpg' %}"><img src="{% static 'app/img/tienda/6.jpg' %}"></a>     
+                <a data-fancybox="gallery" href="{% static 'app/img/tienda/7.jpg' %}"><img src="{% static 'app/img/tienda/7.jpg' %}"></a>     
+                <a data-fancybox="gallery" href="{% static 'app/img/tienda/8.jpg' %}"><img src="{% static 'app/img/tienda/8.jpg' %}"></a>     
+                 
+           </div>
+           <br><br>
+    </div>
+    <h2 class="titulo"> UBICACION!</h2>
+    <br><br>
+    <div class="mapa">
+       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1664.5744644868505!2d-70.62690866150498!3d-33.44542625528069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cfc1ab8d2965%3A0x52748ee8efe441c8!2sGalp%C3%B3n%20Italia!5e0!3m2!1ses!2scl!4v1720150690464!5m2!1ses!2scl" width="1100" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+
+
+{% endblock %}

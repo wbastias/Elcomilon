@@ -1,0 +1,202 @@
+{% extends 'app/base.html' %}
+
+{% load static %}
+
+{% block css %}
+
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,700;1,600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+     
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+
+{% block js %}
+   
+    <script>
+        function agregarAlCarrito(productId) {
+            const cantidad = 1; 
+            $.ajax({
+                url: "{% url 'agregar_al_carrito' %}",
+                method: "POST",
+                data: {
+                    product_id: productId,
+                    cantidad: cantidad,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    alert(response.mensaje); 
+                }
+            });
+        }
+
+        function checkTime() {
+            var now = new Date();
+            var hour = now.getUTCHours();
+
+            // Mostrar los productos solo entre la 1:00 y las 23:00 UTC
+            if (hour >= 1 && hour < 23) {
+                document.querySelectorAll('.card').forEach(function(element) {
+                    element.style.display = 'block';
+                });
+                document.querySelectorAll('.titulo1').forEach(function(element) {
+                    element.style.display = 'block';
+                });
+                document.getElementById('mensaje_horario').style.display = 'none';
+            } else {
+                document.querySelectorAll('.card').forEach(function(element) {
+                    element.style.display = 'none';
+                });
+                document.querySelectorAll('.titulo1').forEach(function(element) {
+                    element.style.display = 'none';
+                });
+                document.getElementById('mensaje_horario').style.display = 'block';
+            }
+        }
+
+        checkTime();
+        setInterval(checkTime, 60000); 
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+     <!-- esta son los scrip para la funcion de la galeria para no tenerlo en la base del html -->
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+          $('.slider').bxSlider({
+              mode: 'fade',//horizontal, vertical, fade
+              auto: true,
+              pause: 2000
+          });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <br><br>
+      <div class="slider">
+                <div >
+                    <img src="{% static 'app/img/banner/banneer1.png' %}" width="100%" >
+                </div>
+                <div>
+                    <img src="{% static 'app/img/banner/banneer2.png' %}" width="100%">
+                </div>
+                <div>
+                    <img src="{% static 'app/img/banner/banneer3.png' %}" width="100%">
+                </div>
+    </div>
+    
+    {% if not user_authenticated %}
+    <div class="informa">
+        <div class="alert alert-info info">
+        <h2>¿QUIERES GANAR ALMUERZOS GRATIS POR UNA SEMANA?</h2>
+        <p>Te invitamos a unirte a nuestra comunidad de suscriptores y participar en nuestro nuevo programa de selección de menús.</p>
+        <p>Cuando te suscribes a nuestro boletín, no solo recibirás las últimas noticias y promociones exclusivas, sino que también podrás influir en nuestro menú del día.</p>
+        <p>¿Cómo funciona? es muy sencillo:</p>
+        <ol>
+            <li>Suscríbete: Haz clic en el botón registrar para suscribirte</li>
+            <li>Completa el formulario: una vez suscrito, recibirás un formulario diario donde podrás indicar que te gustaría almorzar.</li>
+            <li>Elige tu menú: según las preferencias de nuestros suscriptores, los menús más populares se anunciarán cada mañana a las 9 AM.</li>
+            <li>¡Disfruta tu almuerzo favorito!: ven a disfrutar del almuerzo que tú y otros suscriptores han elegido.</li>
+        </ol>
+        <p>Al suscribirte tendrás la oportunidad de ayudar a definir nuestro menú y asegurarte de que estén tus opciones favoritas disponibles. Además, al participar entrarás automáticamente a UN SORTEO MENSUAL PARA GANAR ALMUERZOS GRATIS POR UNA SEMANA.</p>
+    </div>
+
+    </div>
+    
+
+{% endif %}
+ 
+    {% load humanize %}
+    <hr>
+
+    <div id="mensaje_horario" style="display: none;">
+        <br>
+        <div class="alert alert-info">
+        <h2><center>El menú del día estará disponible a las 9 AM. </center></h2>
+        <h3><center>¡Prepárate para disfrutar de deliciosas opciones!</center></h3>
+    </div>
+    </div>
+
+    <h2 class="titulo1">MENÚ</h2>
+
+
+    <br><br>
+        <div class="modal" id="modal">
+                <div class="modal-content">
+                    <img src="" alt="" class="modal-img" id="modal-img">
+                </div>
+            <div class="modal-boton" id="modal-boton">X</div>
+        </div>
+
+    <div class="container-productos" id="lista-productos">
+        {% for p in productos_menu %}
+        <div class="card">
+            <div class="contenedor_producto">
+                {% if p.imagen %}
+                <img src="{{ p.imagen.url }}" class="card-img" alt="imagen producto">
+                {% endif %}
+                <div class="detalle">
+                    <h3><p>{{ p.nombre | title }}</p></h3>
+                    <p>{{ p.descripcion }}</p>
+                    <p>${{ p.precio | intcomma }}</p>
+                    <a class="btn btn-warning" onclick="agregarAlCarrito('{{ p.id }}')">Compra</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+<br>
+    <h2 class="titulo1">BEBIDAS</h2>
+    <br><br>
+    <div class="container-productos" id="lista-productos">
+        {% for p in productos_bebestible %}
+        <div class="card">
+            <div class="contenedor_producto">
+                {% if p.imagen %}
+                <img src="{{ p.imagen.url }}" class="card-img"   alt="imagen producto">
+                {% endif %}
+                <div class="detalle">
+                    <h3>{{ p.nombre | title }}</h3>
+                    <h6>{{ p.descripcion }}</h6>
+                    <p>${{ p.precio | intcomma }}</p>
+                    <a class="btn btn-warning" onclick="agregarAlCarrito('{{ p.id }}')">Compra</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+<br>
+    <h2 class="titulo1">POSTRES</h2>
+    <br><br>
+    <div class="container-productos" id="lista-productos" >
+        {% for p in productos_postre %}
+        <div class="card">
+            <div class="contenedor_producto">
+                {% if p.imagen %}
+                <img src="{{ p.imagen.url }}" class="card-img"  alt="imagen producto">
+                {% endif %}
+                <div class="detalle">  
+                    <h3>{{ p.nombre | title }}</h3>
+                    <h6>{{ p.descripcion }}</h6>
+                    <p>${{ p.precio | intcomma }}</p>
+                    <a class="btn btn-warning" onclick="agregarAlCarrito('{{ p.id }}')">Compra</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    
+
+{% endblock %}

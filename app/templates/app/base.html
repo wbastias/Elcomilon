@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wally</title>
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- define lko que se va a ver en todas los enlace de html-->
+    {% load static %}
+    <!-- en esto se coloca la hoja de estilo -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <!-- En esto es para los iconos con estilos-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- en esto se coloca la hoja de estilo -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    {% block css %}
+
+    {% endblock %}
+</head>
+<body>
+
+    
+    <header id="header">
+        <img class="menu" src="{% static 'app/img/menuiconwhite.png' %}" alt="menu" id="menu">
+        <div class="contenedor_logo">
+            <img  class="logo"  src="{% static 'app/img/logo.png' %}" alt="logo">
+        </div>
+
+        <div>
+            
+            <nav id="nav">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}"> <i class="bi bi-house-fill"></i> Inicio </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'contacto' %}"> <i class="bi bi-envelope-at-fill"></i> Contacto</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'galeria' %}"> <i class="bi bi-images"></i> Galería</a>
+                    </li>
+                    {% if perms.app.add_producto %}
+                    <li>
+                        <a href="{%  url 'agregar_producto'%}"> <i class="bi bi-database-fill-add"></i> Agregar Producto</a>
+                    </li>
+                    {% endif %}
+                    {% if perms.app.view_producto %}
+                    <li>
+                        <a href="{%  url 'listar_producto' %}"><i class="bi bi-list-task"></i> Lista Productos</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'ver_carrito'%}"> <i class="bi bi-cart4"></i> Ver Carrito</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="bi bi-person-square"></i> {{ user.username }}</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                    <form id="logout-form" class="d-inline" method="POST" action="{% url 'logout' %}" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                        
+                    {% else %}
+                        <li>
+                            <a href="{%  url 'login' %}"> <i class="bi bi-door-open-fill"></i> Iniciar Sesion</a>
+                        </li>
+                        <li>
+                            <a href="{%  url 'registro' %}"> <i class="bi bi-file-richtext-fill"></i> Registro</a>
+                        </li>
+
+                    {% endif%}
+                </ul>
+            </nav>
+
+        </div>
+
+    </header>
+
+    <div id="contenido">
+
+        
+        {% block content %}
+
+        {% endblock %}
+
+
+    </div>
+
+    <br><br><br>
+
+    <footer>
+        
+        <div class="logo_footer">
+            <img src="{% static 'app/img/logo.png' %}" alt="logo">
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    
+
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+    {% if messages %}
+
+        {% for m in messages %}
+            <script>
+                Swal.fire({
+                    "title": "Felicitaciones",
+                    "text": "{{ m }}",
+                    "icon":"success",
+                })
+            </script>
+        {% endfor %}
+
+    {% endif %}
+    {% block js %}
+
+    {% endblock %}
+
+</body>
+</html>

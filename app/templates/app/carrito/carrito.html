@@ -1,0 +1,128 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+<br>
+ <h1 class="titulo">CARRITO DE COMPRA</h1>
+    <br>
+<div class="container lg">
+   
+    <hr>
+    
+    <div class="row">
+        <div class="col-md-7">
+            <h2 class="titulo">PRODUCTOS</h2>
+            <br>
+            <div class="container-productos" id="lista-productos">
+                {% for p in productos %}
+                <div class="card">
+                    <div class="contenedor_producto">
+                        {% if p.imagen %}
+                        <img src="{{ p.imagen.url }}" alt="imagen producto">
+                        {% endif %}
+                        <div class="detalle">
+                            <h3>{{ p.tipo | capfirst }}</h3>
+                            <h6>{{ p.nombre | title }}</h6>
+                            <p>${{ p.precio | intcomma }}</p>
+                            <button class="btn btn-warning" onclick="agregarAlCarrito('{{ p.id }}')">Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            
+            <table class="table table-striped table-hover table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th></th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for id, item in carrito.items %}
+                    <tr>
+                        <td>{{ item.nombre }}</td>
+                        <td><img src="{{item.imagen.url}}" alt="" style="width: 50px;"></td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" onclick="actualizarCantidad('{{ id }}', 'sumar')">+</button>
+                            {{ item.cantidad }}
+                            <button class="btn btn-sm btn-dark" onclick="actualizarCantidad('{{ id }}', 'restar')">-</button>
+                        </td>
+                        <td>${{ item.precio }}</td>
+                        <td>${{ item.total_producto }}</td>
+                        <td>
+                            <button class="btn btn-warning"onclick="eliminarProducto('{{ id }}')">Eliminar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <hr>
+            <h2>Total: ${{ total }}</h2>
+            <form method="post" action="{% url 'procesar_compra' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">Comprar</button>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    function actualizarCantidad(productId, accion) {
+        const csrfToken = '{{ csrf_token }}';
+        $.ajax({
+            url: "{% url 'actualizar_carrito' %}",
+            method: "POST",
+            data: {
+                product_id: productId,
+                accion: accion,
+                csrfmiddlewaretoken: csrfToken
+            },
+            success: function(response) {
+                location.reload();
+            }
+        });
+    }
+
+    function eliminarProducto(productId) {
+        const csrfToken = '{{ csrf_token }}';
+        $.ajax({
+            url: "{% url 'eliminar_del_carrito' %}",
+            method: "POST",
+            data: {
+                product_id: productId,
+                csrfmiddlewaretoken: csrfToken
+            },
+            success: function(response) {
+                location.reload();
+            }
+        });
+    }
+
+    function agregarAlCarrito(productId) {
+        const csrfToken = '{{ csrf_token }}';
+        const cantidad = 1;
+        $.ajax({
+            url: "{% url 'agregar_al_carrito' %}",
+            method: "POST",
+            data: {
+                product_id: productId,
+                cantidad: cantidad,
+                csrfmiddlewaretoken: csrfToken
+            },
+            success: function(response) {
+                location.reload();
+            }
+        });
+    }
+</script>
+
+{% endblock %}

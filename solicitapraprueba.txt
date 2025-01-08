@@ -1,0 +1,9 @@
+evaluacion:
+1.- atraves de un video presentacion un video maximo de 5 min 
+2.-uso del super usario ya esta administrar como se define como modelo maximo tres trabla realcionada
+3.- debe poder realizar una venta de lo que esta promocionando(carrito de compra) - guardar registro en base de dato
+ carrito de compra es temporal la compra es permanente
+
+poder administrar o mantener el registro de las tabla modificar selectionar modificar elimanr 
+
+siempre tiene que ir el entorno virtual 

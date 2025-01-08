@@ -1,0 +1,49 @@
+{% extends 'app/base.html' %}
+
+{% load static %}
+
+{% block css %}
+<!-- estes es un clocke para llenar con contendidos la pagina-->
+
+{% endblock %}
+
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+<br>
+<div class="row">
+    <div class="col-12 col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="titulo" >CONTACTANOS!</h2>
+                <hr>
+                <form action="" class="" method="post">
+                    <!--para poder guardar los datos y sea mas seguro la pagina         csrf_token siempre se hace con el methodo post por seguridad-->
+                    {% csrf_token %}
+                    <!-- aqui llamo el form de el formulario realizado en forms que se         agrega la variable en views para poder guardar informacion -->
+                    {{ form | crispy }} 
+
+                    <!-- es crispy es para agregarle bootrap al formulario y en la         clase de los botones se agrega btn btn-primary y secondary-->
+                    <br>
+                    <div class="d-flex justify-content-end">
+                        
+                        <button type="submit" id="btnEnviar" class="btn btn-warning">Enviar</button>
+                        &nbsp;
+                        <input type="reset" value="Cancelar" class="btn btn-dark">
+               
+                    </div>
+                </form>
+
+                    <table id="tablacontactos">
+                    </table>
+                    {{ mensaje }}
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<!-- este html es para poder ver el formulario en la pagina de termomarket sin necesidad de verla en admin que trae por defecto -->
+
+{% load crispy_forms_tags %}
+<!-- para agregar bootstrap en la pagina -->
+<br>
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <!-- el card es para darle la caja en blanco al formulario -->
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="titulo"> Nuevo Producto </h2>
+                    <hr>
+
+                    <!-- enctype para subir la imagen en parte y no como una url-->
+                    <form action="" method="post" enctype="multipart/form-data">
+                        
+                        <!-- csrf_token sirve para darle seguridad a la pagina y asi no se revele la informacion -->
+                        {% csrf_token %}
+
+                        <!-- para llamar el formulario que se encuentra en contacto-->
+                        {{ form | crispy }}
+
+                        <!-- son los botones que llevar los formularios -->
+                        <br>
+                        <div class="d-flex justify-content-end">
+                            <input type="submit" value="Guardar" class="btn btn-warning">
+                            &nbsp;
+                            <input type="reset" value="Cancelar" class="btn btn-dark">
+                        </div>
+                    </form>
+                    {{ mensaje }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
